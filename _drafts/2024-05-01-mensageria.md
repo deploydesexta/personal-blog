@@ -10,8 +10,17 @@ title: System Design - Mensageria, Eventos, Streaming e Arquitetura Assincrona
 
 Arquiteturas assíncronas derivadas do uso de mensageria e eventos são recursos muito valiosos quando arquitetamos soluções complexas de sistemas distribuídos. Assim como os dois capítulos anteriores, onde falamos sobre [protocolos e padrões de rede](/protocolos-de-rede/) e [padrões de comunicação síncronos](/padroes-de-comunicacao-sincronos/) em sistemas, esse tópico também visa detalhar comunicações entre componentes de uma arquitetura de serviço, mas com uma abordagem de comunicação assíncrona. Vamos detalhar e diferenciar alguns tópicos importantes, como Mensagens e Eventos, e como utilizá-los para resolver problemas de comunicação em larga escala utilizando protocolos como MQTT, AMQP, comunicação assíncrona over-TCP com o Kafka, arquitetura desses componentes, assim como suas vantagens e limitações.
 
-
 <br>
+
+> Sobre a introdução e a parte abaixo ("Mensagens e Eventos"), algumas sugestões:
+> Eu particularmente acho interessante tentar desambiguar e trabalar com os termos `Message-driven` e `Event-driven`. Do contrário, o uso puro dos termos "Mensagem", "Eventos" e "Mensageria" pode ficar bem confuso, já que na literatura **eventos são mensagens**. Te explico:
+> 
+> Eu gosto bastante de usar essa referência aqui [lightbend: message-driven-event-driven](https://developer.lightbend.com/docs/akka-guide/concepts/message-driven-event-driven.html). Diz que `Message-driven` é um building-block, uma ferramenta, para construir sistemas assíncronos. Já `Event-driven` é uma característica, que usa da ferramenta `Message-driven`, ou se preferir, "Mensageria". Inclusive, nessa mesma fonte tem a definição de "Mensagem" no contexto `Message-driven`, que é exatamente o que descreveu no tópico *"Definindo mensageria"*. Já no contexto `Event-driven`, como comentei, "Mensagem" é tratado como um meio, algo abstrato, e "Evento" é tratado como uma especificação de "Mensagem". Ou seja, nem sempre "Mensagem" é tratado como igual a "Mensageria", assim como tratou nesse capítulo, ela varia depdendendo do estílo de comunicação assíncrona.
+> 
+> No livro "Building Microservices 2nd edition", o autor comenta, na página 110, a diferença de "Mensagem" e "Evento" no contexto `Event-driven`, *"An event is a fact - a statement that something happened, along with some information about what happened. A message is a thing we send onver an asynchronous communication mechanism, like a message broker"* e, logo depois resume, *"The message is the medium; the event is the payload"*.
+> 
+> No livro "Microservice Patterns", também vemos a mesma coisa e vai além, descreve que há vários tipos de mensagem, destacando três, na página 86, *"**Document**: A generic message that contaings only data. The receiver decides how to interpret it. The reply to a command is an example of a document message. **Command**: A message that's the equivalent of an RPC request. It specifies the operation to invoke and its parameters. **Event**: A message indicating tat something notable has occurred in the sender. An event is often a domain event, which represents a state change of a domain object such as an Order, or a Customer"*.
+
 
 # Mensagens e Eventos
 
